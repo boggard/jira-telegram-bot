@@ -105,3 +105,4 @@ ENV/
 /run.sh
 /stop.sh
 .idea
+/*.db
