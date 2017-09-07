@@ -1,0 +1,5 @@
+setproctitle
+peewee
+requests
+python-telegram-bot
+python-dotenv

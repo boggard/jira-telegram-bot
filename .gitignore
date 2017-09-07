@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+Будет удалено .idea/inspectionProfiles/
+Будет удалено .idea/workspace.xml
+
+/run.sh
+/stop.sh
+.idea
