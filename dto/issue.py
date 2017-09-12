@@ -1,5 +1,6 @@
 from config import JIRA_WEB_URL
 from utils import date_util
+from utils.markdown import markdown_prepare
 
 
 class Issue:
@@ -17,3 +18,20 @@ class Issue:
         self.status = jira_issue["fields"]["status"]["name"]
         self.components = ",".join([component["name"] for component in jira_issue["fields"]["components"]])
         self.comments = comments
+
+    def __str__(self):
+        text = "*Project*: " + markdown_prepare(self.project_name) + "\n" + \
+               "*Issue*: [" + markdown_prepare(self.alias) + "]" + "(" + markdown_prepare(self.link) + ")" + \
+               (" *was created* on *" + self.created + "*" if self.created == self.updated
+                else " *was updated* on *" + self.updated + "*") + "\n" + \
+               "*Components*: " + markdown_prepare(self.components) + "\n" + \
+               "*Status*: " + markdown_prepare(self.status) + "\n" + \
+               "*Author*: " + markdown_prepare(self.author) + "\n" + \
+               "*Assignee*: " + markdown_prepare(self.assignee) + "\n" + \
+               "*Caption*: " + markdown_prepare(self.caption) + "\n" + \
+               "*Description*: " + markdown_prepare(self.description) + "\n"
+
+        if len(self.comments) > 0:
+            text += "\n" + "*New comments*: " + "\n" + \
+                    "\n".join("*" + markdown_prepare(comment.author) + " said*: " + markdown_prepare(comment.content)
+                              for comment in self.comments)

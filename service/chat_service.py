@@ -3,13 +3,16 @@ from model.user import User
 from telegram.ext import JobQueue
 from telegram import ParseMode
 from service import jira_service
-from utils.markdown import markdown_prepare
-from utils import date_util
 
 
 def init_bot(job_queue: JobQueue):
     for chat in Chat.select(Chat):
         add_job(job_queue, chat)
+
+
+def help_command(bot, update):
+    update.message.reply_text("Use next commands to work with bot:" + "\n" +
+                              "/set <username>  - to setup user who's issues you want to get")
 
 
 def set_user(bot, update, args, job_queue: JobQueue, chat_data):
@@ -35,21 +38,7 @@ def set_user(bot, update, args, job_queue: JobQueue, chat_data):
 def send_issue(bot, job):
     chat = job.context
     for issue in jira_service.get_new_issues(username=chat.user.name):
-        text = "*Project*: " + markdown_prepare(issue.project_name) + "\n" + \
-               "*Issue*: [" + markdown_prepare(issue.alias) + "]" + "(" + markdown_prepare(issue.link) + ")" + \
-               (" *was created* on *" + issue.created + "*" if issue.created == issue.updated
-                else " *was updated* on *" + issue.updated + "*") + "\n" + \
-               "*Components*: " + markdown_prepare(issue.components) + "\n" + \
-               "*Status*: " + markdown_prepare(issue.status) + "\n" + \
-               "*Author*: " + markdown_prepare(issue.author) + "\n" + \
-               "*Assignee*: " + markdown_prepare(issue.assignee) + "\n" + \
-               "*Caption*: " + markdown_prepare(issue.caption) + "\n" + \
-               "*Description*: " + markdown_prepare(issue.description) + "\n\n" + \
-               "*New comments*: " + "\n" + \
-               "\n".join("*" + markdown_prepare(comment.author) + " said*: " + markdown_prepare(comment.content)
-                         for comment in issue.comments)
-
-        bot.send_message(chat_id=chat.t_id, text=text, parse_mode=ParseMode.MARKDOWN)
+        bot.send_message(chat_id=chat.t_id, text=issue.__str__(), parse_mode=ParseMode.MARKDOWN)
 
 
 def add_job(job_queue: JobQueue, chat: Chat):
