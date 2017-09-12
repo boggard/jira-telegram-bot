@@ -3,6 +3,7 @@ from model.user import User
 from config import JIRA_USER, JIRA_PASSWORD, JIRA_REST_URL
 from utils import date_util
 from dto.issue import Issue
+from dto.comment import Comment
 
 auth = (JIRA_USER, JIRA_PASSWORD)
 
@@ -37,6 +38,15 @@ def add_issues(*issues, user: User):
         if user.last_updated is None or user.last_updated < updated:
             user.last_updated = updated
             user.save()
-            issues_wrappers.append(Issue(issue))
+            issues_wrappers.append(Issue(issue, get_comments(issue)))
 
     return issues_wrappers
+
+
+def get_comments(issue):
+    url = JIRA_REST_URL + "/issue/" + issue["id"] + "/comment"
+
+    r = requests.get(url, auth=auth)
+
+    return [Comment(comment) for comment in r.json()["comments"]
+            if date_util.format_jira_date(comment["updated"]) == date_util.format_jira_date(issue["fields"]["updated"])]

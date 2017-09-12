@@ -44,7 +44,10 @@ def send_issue(bot, job):
                "*Author*: " + markdown_prepare(issue.author) + "\n" + \
                "*Assignee*: " + markdown_prepare(issue.assignee) + "\n" + \
                "*Caption*: " + markdown_prepare(issue.caption) + "\n" + \
-               "*Description*: " + markdown_prepare(issue.description) + "\n"
+               "*Description*: " + markdown_prepare(issue.description) + "\n\n" + \
+               "*New comments*: " + "\n" + \
+               "\n".join("*" + markdown_prepare(comment.author) + " said*: " + markdown_prepare(comment.content)
+                         for comment in issue.comments)
 
         bot.send_message(chat_id=chat.t_id, text=text, parse_mode=ParseMode.MARKDOWN)
 
