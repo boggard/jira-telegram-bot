@@ -1,5 +1,6 @@
 from model.chat import Chat
 from model.user import User
+from model.permission import Permission
 from telegram.ext import JobQueue
 from telegram import ParseMode
 from service import jira_service
@@ -12,11 +13,16 @@ def init_bot(job_queue: JobQueue):
 
 
 def help_command(bot, update):
-    update.message.reply_text("Use next commands to work with bot:" + "\n" +
+    update.message.reply_text("Your user_id - *" + str(update.message.from_user.id) + "*." + "\n" +
+                              "Use next commands to work with bot:" + "\n" +
                               "/set <username>  - to setup user who's issues you want to get")
 
 
-def set_user(bot, update, args, job_queue: JobQueue):
+def set_user(bot, update, args, job_queue: JobQueue, chat_data):
+    # if update.message.from_user.id not in [p.t_id for p in Permission.select(Permission.t_id)]:
+    #     update.message.reply_text("You don't have permission to get issues from this jira-service")
+    #     return
+
     user = User.get_or_create(name=args[0])[0]
 
     t_id = update.message.chat_id
