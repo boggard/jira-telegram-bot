@@ -39,7 +39,9 @@ def send_issue(bot, job):
                "*Issue*: [" + markdown_prepare(issue.alias) + "]" + "(" + markdown_prepare(issue.link) + ")" + \
                (" *was created* on *" + issue.created + "*" if issue.created == issue.updated
                 else " *was updated* on *" + issue.updated + "*") + "\n" + \
+               "*Status*: " + markdown_prepare(issue.status) + "\n" + \
                "*Author*: " + markdown_prepare(issue.author) + "\n" + \
+               "*Assignee*: " + markdown_prepare(issue.assignee) + "\n" + \
                "*Caption*: " + markdown_prepare(issue.caption) + "\n" + \
                "*Description*: " + markdown_prepare(issue.description) + "\n"
 
