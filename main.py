@@ -18,8 +18,7 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("set", chat_service.set_user,
                                   pass_args=True,
-                                  pass_job_queue=True,
-                                  pass_chat_data=True))
+                                  pass_job_queue=True))
     dp.add_handler(CommandHandler("help", chat_service.help_command))
 
     updater.start_polling()

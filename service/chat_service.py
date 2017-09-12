@@ -3,6 +3,7 @@ from model.user import User
 from telegram.ext import JobQueue
 from telegram import ParseMode
 from service import jira_service
+from config import JIRA_REQUESTS_SECONDS_PERIOD
 
 
 def init_bot(job_queue: JobQueue):
@@ -15,7 +16,7 @@ def help_command(bot, update):
                               "/set <username>  - to setup user who's issues you want to get")
 
 
-def set_user(bot, update, args, job_queue: JobQueue, chat_data):
+def set_user(bot, update, args, job_queue: JobQueue):
     user = User.get_or_create(name=args[0])[0]
 
     t_id = update.message.chat_id
@@ -47,4 +48,4 @@ def add_job(job_queue: JobQueue, chat: Chat):
         job.enabled = False
         job.schedule_removal()
 
-    job_queue.run_repeating(send_issue, 5, context=chat)
+    job_queue.run_repeating(send_issue, JIRA_REQUESTS_SECONDS_PERIOD, context=chat)
