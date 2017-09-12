@@ -48,4 +48,4 @@ def add_job(job_queue: JobQueue, chat: Chat):
         job.enabled = False
         job.schedule_removal()
 
-    job_queue.run_repeating(send_issue, JIRA_REQUESTS_SECONDS_PERIOD, context=chat)
+    job_queue.run_repeating(send_issue, int(JIRA_REQUESTS_SECONDS_PERIOD), context=chat)
