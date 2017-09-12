@@ -4,8 +4,8 @@ from utils import date_util
 
 class Issue:
     def __init__(self, jira_issue):
-        self.created = date_util.format_jira_date(jira_issue["fields"]["created"])
-        self.updated = date_util.format_jira_date(jira_issue["fields"]["updated"])
+        self.created = date_util.to_str(date_util.format_jira_date(jira_issue["fields"]["created"]))
+        self.updated = date_util.to_str(date_util.format_jira_date(jira_issue["fields"]["updated"]))
         self.caption = jira_issue["fields"]["summary"]
         self.project_name = jira_issue["fields"]["project"]["name"]
         self.alias = jira_issue["key"]

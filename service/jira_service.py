@@ -34,7 +34,7 @@ def add_issues(*issues, user: User):
     for issue in issues[0]:
         updated = date_util.format_jira_date(issue["fields"]["updated"])
 
-        if user.last_updated is None or date_util.to_db_format(user.last_updated) != updated:
+        if user.last_updated is None or user.last_updated < updated:
             user.last_updated = updated
             user.save()
             issues_wrappers.append(Issue(issue))
