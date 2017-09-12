@@ -15,3 +15,4 @@ class Issue:
         assignee = jira_issue["fields"]["assignee"]
         self.assignee = assignee["displayName"] if assignee is not None else "Not defined"
         self.status = jira_issue["fields"]["status"]["name"]
+        self.components = ",".join([component["name"] for component in jira_issue["fields"]["components"]])
