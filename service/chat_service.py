@@ -13,9 +13,10 @@ def init_bot(job_queue: JobQueue):
 
 
 def help_command(bot, update):
-    update.message.reply_text("Your user_id - *" + str(update.message.from_user.id) + "*." + "\n" +
-                              "Use next commands to work with bot:" + "\n" +
-                              "/set <username>  - to setup user who's issues you want to get")
+    bot.send_message(text="Your user_id - " + str(update.message.from_user.id) + "." + "\n" +
+                          "Use next commands to work with bot:" + "\n" +
+                          "/set <username>  - to setup user who's issues you want to get",
+                     chat_id=update.message.chat_id)
 
 
 def set_user(bot, update, args, job_queue: JobQueue, chat_data):
