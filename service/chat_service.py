@@ -13,16 +13,15 @@ def init_bot(job_queue: JobQueue):
 
 
 def help_command(bot, update):
-    bot.send_message(text="Your user_id - " + str(update.message.from_user.id) + "." + "\n" +
-                          "Use next commands to work with bot:" + "\n" +
+    bot.send_message(text="Use next commands to work with bot:" + "\n" +
                           "/set <username>  - to setup user who's issues you want to get",
                      chat_id=update.message.chat_id)
 
 
 def set_user(bot, update, args, job_queue: JobQueue, chat_data):
-    # if update.message.from_user.id not in [p.t_id for p in Permission.select(Permission.t_id)]:
-    #     update.message.reply_text("You don't have permission to get issues from this jira-service")
-    #     return
+    if update.message.from_user.id not in [p.t_id for p in Permission.select(Permission.t_id)]:
+        update.message.reply_text("You don't have permission to get issues from this jira-service")
+        return
 
     user = User.get_or_create(name=args[0])[0]
 
