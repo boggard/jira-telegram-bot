@@ -35,3 +35,5 @@ class Issue:
             text += "\n" + "*New comments*: " + "\n" + \
                     "\n".join("*" + markdown_prepare(comment.author) + " said*: " + markdown_prepare(comment.content)
                               for comment in self.comments)
+
+        return text

@@ -45,7 +45,7 @@ def set_user(bot, update, args, job_queue: JobQueue, chat_data):
 def send_issue(bot, job):
     chat = job.context
     for issue in jira_service.get_new_issues(username=chat.user.name):
-        bot.send_message(chat_id=chat.t_id, text=issue.__str__(), parse_mode=ParseMode.MARKDOWN)
+        bot.send_message(chat_id=chat.t_id, text=str(issue), parse_mode=ParseMode.MARKDOWN)
 
 
 def add_job(job_queue: JobQueue, chat: Chat):
