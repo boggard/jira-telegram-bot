@@ -21,7 +21,7 @@ def help_command(bot, update):
 
 def my_id_command(bot, update):
     bot.send_message(text="Your user_id - *{0}*".format(update.message.from_user.id),
-                     chat_id=update.message.chat_id)
+                     chat_id=update.message.chat_id, parse_mode=ParseMode.MARKDOWN)
 
 
 def set_user(bot, update, args, job_queue: JobQueue, chat_data):
