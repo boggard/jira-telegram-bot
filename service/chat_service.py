@@ -3,7 +3,6 @@ from model.user import User
 from model.permission import Permission
 from telegram.ext import JobQueue
 from telegram import ParseMode
-from telegram import TelegramError
 from service import jira_service
 from config import JIRA_REQUESTS_SECONDS_PERIOD
 from datetime import datetime
@@ -26,12 +25,14 @@ def my_id_command(bot, update):
                      chat_id=update.message.chat_id, parse_mode=ParseMode.MARKDOWN)
 
 
-def set_user(bot, update, args, job_queue: JobQueue, chat_data):
+def set_user(bot, update, args, job_queue: JobQueue):
     if update.message.from_user.id not in [p.t_id for p in Permission.select(Permission.t_id)]:
         update.message.reply_text("You don't have permission to get issues from this jira-service")
         return
 
-    user = User.get_or_create(name=args[0], last_updated=datetime.now())[0]
+    user = User.get_or_create(name=args[0])
+    user.last_updated = datetime.now()
+    user.save()
 
     t_id = update.message.chat_id
 
