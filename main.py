@@ -21,6 +21,7 @@ def main():
                                   pass_job_queue=True,
                                   pass_chat_data=True))
     dp.add_handler(CommandHandler("help", chat_service.help_command))
+    dp.add_handler(CommandHandler("me", chat_service.my_id_command))
 
     updater.start_polling()
     updater.idle()

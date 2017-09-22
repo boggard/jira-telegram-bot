@@ -1,4 +1,5 @@
 #Commands for BotFather
 
 set - setup user who's issues you want to get
-help - show information about bot usage
+help - shows information about bot usage
+me - shows your user_id
