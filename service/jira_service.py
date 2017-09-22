@@ -13,24 +13,16 @@ def get_new_issues(username):
     last_date = user.last_updated
     last_date = date_util.to_jira_format(last_date) if last_date is not None else None
     url = JIRA_REST_URL + "/search?jql=(assignee=" + username + \
-          " or reporter=" + username + ")" + \
-          (" and updated>\'" + last_date + "\'" if last_date is not None else '') + \
-          "+order+by+updated+asc"
+                          " or reporter=" + username + ")" + \
+                          (" and updated>\'" + last_date + "\'" if last_date is not None else '') + \
+                          "+order+by+updated+asc"
 
     r = requests.get(url, auth=auth)
 
-    return add_issues(r.json()["issues"], user=user)
+    return get_issues(r.json()["issues"], user=user)
 
 
-def init_user_issues(user):
-    url = JIRA_REST_URL + "/search?jql=assignee=" + user.name + "+order+by+created&maxResults=1"
-
-    r = requests.get(url, auth=auth)
-
-    add_issues(r.json()["issues"], user=user)
-
-
-def add_issues(*issues, user: User):
+def get_issues(*issues, user: User):
     issues_wrappers = []
     for issue in issues[0]:
         updated = date_util.format_jira_date(issue["fields"]["updated"])

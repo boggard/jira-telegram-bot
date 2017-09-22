@@ -21,7 +21,7 @@ class Issue:
 
     def __str__(self):
         text = "*Project*: " + markdown_prepare(self.project_name) + "\n" + \
-               "*Issue*: [" + markdown_prepare(self.alias) + "]" + "(" + markdown_prepare(self.link) + ")" + \
+               "*Issue*: [" + self.alias + "]" + "(" + self.link + ")" + \
                (" *was created* on *" + self.created + "*" if self.created == self.updated
                 else " *was updated* on *" + self.updated + "*") + "\n" + \
                "*Components*: " + markdown_prepare(self.components) + "\n" + \
@@ -33,7 +33,7 @@ class Issue:
 
         if len(self.comments) > 0:
             text += "\n" + "*New comments*: " + "\n" + \
-                    "\n".join("*" + markdown_prepare(comment.author) + " said*: " + markdown_prepare(comment.content)
+                    "\n".join("*" + comment.author + " said*: " + markdown_prepare(comment.content)
                               for comment in self.comments)
 
         return text
