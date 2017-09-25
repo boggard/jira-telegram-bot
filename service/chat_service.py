@@ -6,6 +6,7 @@ from telegram import ParseMode
 from service import jira_service
 from config import JIRA_REQUESTS_SECONDS_PERIOD
 from datetime import datetime
+import logging
 
 
 def init_bot(job_queue: JobQueue):
@@ -51,8 +52,12 @@ def set_user(bot, update, args, job_queue: JobQueue):
 
 def send_issue(bot, job):
     chat = job.context
-    for issue in jira_service.get_new_issues(username=chat.user.name):
-        bot.send_message(chat_id=chat.t_id, text=str(issue), parse_mode=ParseMode.MARKDOWN)
+    id = chat.t_id
+    try:
+        for issue in jira_service.get_new_issues(username=chat.user.name):
+            bot.send_message(chat_id=id, text=str(issue), parse_mode="kc")
+    except:
+        logging.exception("{0}: Exception in sending issues to user with id:{1}".format(datetime.now(), id))
 
 
 def add_job(job_queue: JobQueue, chat: Chat):

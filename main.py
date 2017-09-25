@@ -3,11 +3,13 @@ from model import init_database
 from service import chat_service
 from telegram.ext import Updater, CommandHandler
 from setproctitle import setproctitle
-from config import PROXY_URL, PROC_TITLE
+from config import PROXY_URL, PROC_TITLE, LOG_ERROR_FILE
+import logging
 
 
 def main():
     setproctitle(PROC_TITLE)
+    logging.basicConfig(filename=LOG_ERROR_FILE, level=logging.ERROR)
 
     request_keys = {"proxy_url": PROXY_URL}
     updater = Updater(TOKEN, request_kwargs=request_keys)
