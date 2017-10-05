@@ -11,11 +11,11 @@ class Issue:
         self.project_name = jira_issue["fields"]["project"].get("name")
         self.alias = jira_issue["key"]
         self.link = JIRA_WEB_URL + "browse/" + jira_issue["key"]
-        self.description = jira_issue["fields"].get("description", "")
+        self.description = jira_issue["fields"].get("description") or ""
         self.author = jira_issue["fields"]["reporter"].get("displayName")
         assignee = jira_issue["fields"].get("assignee")
         self.assignee = assignee["displayName"] if assignee is not None else "Not defined"
-        self.status = jira_issue["fields"]["status"].get("name", "")
+        self.status = jira_issue["fields"]["status"].get("name") or ""
         self.components = ",".join([component["name"] for component in jira_issue["fields"]["components"]])
         self.comments = comments
 
