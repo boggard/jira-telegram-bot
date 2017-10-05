@@ -22,7 +22,7 @@ def help_command(bot, update):
 
 
 def my_id_command(bot, update):
-    bot.send_message(text="Your user_id - *{0}*".format(update.message.from_user.id),
+    bot.send_message(text="Your userId - *{0}*".format(update.message.from_user.id),
                      chat_id=update.message.chat_id, parse_mode=ParseMode.MARKDOWN)
 
 
@@ -31,7 +31,7 @@ def set_user(bot, update, args, job_queue: JobQueue):
         update.message.reply_text("You don't have permission to get issues from this jira-service")
         return
 
-    user = User.get_or_create(name=args[0])
+    user = User.get_or_create(name=args[0])[0]
     user.last_updated = datetime.now()
     user.save()
 

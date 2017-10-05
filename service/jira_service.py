@@ -9,7 +9,7 @@ auth = (JIRA_USER, JIRA_PASSWORD)
 
 
 def get_new_issues(username):
-    user = User.get(name=username)
+    user = User.get(User.name == username)
     last_date = user.last_updated
     last_date = date_util.to_jira_format(last_date) if last_date is not None else None
     url = JIRA_REST_URL + "/search?jql=(assignee=" + username + \
