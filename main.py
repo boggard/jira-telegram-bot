@@ -1,10 +1,11 @@
-from config import TOKEN
+import logging
+from setproctitle import setproctitle
+
+from telegram.ext import CommandHandler, Updater
+
+from config import LOG_ERROR_FILE, PROC_TITLE, PROXY_URL, TOKEN
 from model import init_database
 from service import chat_service
-from telegram.ext import Updater, CommandHandler
-from setproctitle import setproctitle
-from config import PROXY_URL, PROC_TITLE, LOG_ERROR_FILE
-import logging
 
 
 def main():
