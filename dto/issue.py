@@ -55,4 +55,4 @@ class Issue:
                                                    markdown_prepare(
                                                        comment.content)))
     
-        return "".join(text)
+        return "\n".join(text)
