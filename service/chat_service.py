@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 
+from peewee import DoesNotExist
 from telegram import ParseMode
 from telegram.ext import JobQueue
 
@@ -34,19 +35,23 @@ def set_user(bot, update, args, job_queue: JobQueue):
         update.message.reply_text(
             "You don't have permission to get issues from this jira-service")
         return
-    
+
     user, _ = User.get_or_create(name=args[0])
     user.last_updated = datetime.now()
     user.save()
-    
+
     t_id = update.message.chat_id
-    
-    chat, _ = Chat.get_or_create(t_id=t_id)
+
+    try:
+        chat = Chat.get(t_id=t_id)
+    except DoesNotExist:
+        chat = Chat.create(t_id=t_id)
+
     chat.user = user
     chat.save()
-    
+
     add_job(job_queue, chat)
-    
+
     update.message.reply_text(
         'You will get issues notifications from user: ' + user.name)
 
@@ -69,6 +74,6 @@ def add_job(job_queue: JobQueue, chat: Chat):
         if job.context.id == chat.id:
             job.enabled = False
             job.schedule_removal()
-    
+
     job_queue.run_repeating(send_issue, int(JIRA_REQUESTS_SECONDS_PERIOD),
                             context=chat)
