@@ -30,7 +30,8 @@ def get_issues(*issues, user: User):
         if user.last_updated is None or user.last_updated < updated:
             user.last_updated = updated
             user.save()
-            issues_wrappers.append(Issue(issue, get_comments(issue)))
+            if not is_own_update(issue, user.name):
+                issues_wrappers.append(Issue(issue, get_comments(issue)))
 
     return issues_wrappers
 
@@ -42,3 +43,13 @@ def get_comments(issue):
 
     return [Comment(comment) for comment in r.json()["comments"]
             if date_util.format_jira_date(comment["updated"]) == date_util.format_jira_date(issue["fields"]["updated"])]
+
+
+def is_own_update(issue, username: str):
+    url = JIRA_REST_URL + "/issue/" + issue["key"]
+
+    response = requests.get(url, params={"expand": "changelog"}, auth=auth)
+
+    last_author = response.json()["changelog"]["histories"][-1]["author"]
+
+    return last_author["key"] == username
