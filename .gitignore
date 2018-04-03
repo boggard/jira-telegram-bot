@@ -106,3 +106,5 @@ ENV/
 /stop.sh
 .idea
 /*.db
+
+*.directory

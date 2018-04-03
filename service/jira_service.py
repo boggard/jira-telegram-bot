@@ -1,9 +1,10 @@
 import requests
-from model.user import User
+
 from config import JIRA_USER, JIRA_PASSWORD, JIRA_REST_URL
-from utils import date_util
-from dto.issue import Issue
 from dto.comment import Comment
+from dto.issue import Issue
+from model.user import User
+from utils import date_util
 
 auth = (JIRA_USER, JIRA_PASSWORD)
 
@@ -13,7 +14,7 @@ def get_new_issues(username):
     last_date = user.last_updated
     last_date = date_util.to_jira_format(last_date) if last_date is not None else None
     url = JIRA_REST_URL + "/search?jql=(assignee=" + username + \
-                          " or reporter=" + username + ")" + \
+                          " or reporter=" + username + " or watcher=" + username + ")" + \
                           (" and updated>\'" + last_date + "\'" if last_date is not None else '') + \
                           "+order+by+updated+asc"
 
@@ -50,6 +51,9 @@ def is_own_update(issue, username: str):
 
     response = requests.get(url, params={"expand": "changelog"}, auth=auth)
 
-    last_author = response.json()["changelog"]["histories"][-1]["author"]
+    histories = response.json()["changelog"]["histories"]
 
-    return last_author["key"] == username
+    if len(histories) == 0:
+        return issue["fields"]["reporter"]["key"] == username
+    else:
+        return histories[-1]["author"]["key"] == username
