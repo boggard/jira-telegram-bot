@@ -1,5 +1,5 @@
-setproctitle
-peewee
-requests
-python-telegram-bot
-python-dotenv
+setproctitle==1.1.10
+peewee==2.10.2
+requests==2.18.4
+python-telegram-bot==9.0.0
+python-dotenv==0.7.1
